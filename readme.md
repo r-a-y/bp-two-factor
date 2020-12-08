@@ -2,7 +2,7 @@
 
 Integrates the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin into BuddyPress.
 
-# How to use?
+## How to use?
 
 1. Install and activate the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin.
 2. Install and activate this plugin.
@@ -10,7 +10,7 @@ Integrates the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin in
 4. Enable your preferred 2FA option and ensure one of them is marked as Primary.
 5. Logout and login again to test two-factor authentication.
 
-# Notes
+## Notes
 
 This plugin also makes the following usability improvements:
 
