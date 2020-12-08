@@ -1,0 +1,117 @@
+#two-factor-options > tbody > tr > th {
+  display: none;
+}
+
+#two-factor-options > tbody > tr > td {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#two-factor-options, #two-factor-options .two-factor-methods-table {
+  table-layout: auto;
+}
+
+#two-factor-options, #two-factor-options > tbody > tr > td {
+  border: 0;
+}
+
+#two-factor-heading {
+  margin-top: 2.5em;
+}
+
+.two-factor-methods-table td {
+  font-weight: bold;
+}
+
+.two-factor-methods-table div, .two-factor-methods-table p {
+  font-weight: normal;
+  margin-top: .5em;
+}
+
+#security-keys-section {
+  display: none;
+}
+
+body.no-js #security-keys-section {
+  display: block;
+}
+
+#security-keys-section .spinner {
+  background-size: 20px 20px;
+  display: inline-block;
+  visibility: hidden;
+  float: right;
+  vertical-align: middle;
+  opacity: .7;
+  width: 20px;
+  height: 20px;
+  margin: 4px 10px 0;
+  background-image: url(' . admin_url( '/images/spinner.gif' ) . ');
+}
+
+#security-keys-section .spinner.is-active {
+  visibility: visible;
+}
+
+#two-factor-totp-options.configured p + p {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#two-factor-totp-options.configured p + p a.button {
+  width: max-content;
+}
+
+#two-factor-backup-codes[data-count="0"] span {
+  display: none;
+}
+
+#two-factor-options .two-factor-methods-table td label {
+  margin-top: 0;
+}
+
+#security-keys-section tfoot {
+  display: none;
+}
+
+#security-keys-section td {
+  vertical-align: top;
+}
+
+#security-keys-section .delete {
+  float: none;
+}
+
+#security-keys-section .row-actions {
+  padding-top: .5em;
+}
+
+#security-keys-section .ptitle {
+  padding: .1em;
+}
+
+#two-factor-options label:hover {
+  cursor: pointer;
+}
+
+#two-factor-backup-codes button.code-loading:before {
+  margin: -2px 2px 0 -3px;
+  display: inline-block;
+  font: normal 20px/1 "dashicons";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: top;
+  animation: rotation 2s infinite linear;
+  color: #f56e28;
+  content: "\f463";
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(359deg);
+  }
+}
