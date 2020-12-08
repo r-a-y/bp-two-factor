@@ -22,9 +22,6 @@ function validate() {
 	$user_id  = bp_displayed_user_id();
 	$redirect = trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() );
 
-	// Handle 2FA provider custom action saving like resetting TOTP key.
-	Two_Factor_Core::trigger_user_settings_action();
-
 	// Eek. Ensure we add a notice if a save attempt was made.
 	add_action( 'updated_user_meta', function( $meta_id, $object_id, $meta_key ) use ( $redirect ) {
 		if ( ! isset( $_POST['_nonce_user_two_factor_options'] ) ) {
@@ -59,9 +56,6 @@ function validate() {
 		}
 	}, 10, 3 );
 
-	// Handle 2FA options saving.
-	Two_Factor_Core::user_two_factor_options_update( bp_displayed_user_id() );
-
 	// TOTP.
 	if ( class_exists( 'Two_Factor_Totp' ) ) {
 		$totp = \Two_Factor_Totp::get_instance();
@@ -89,6 +83,12 @@ function validate() {
 		\Two_Factor_FIDO_U2F_Admin::catch_submission( $user_id );
 		\Two_Factor_FIDO_U2F_Admin::catch_delete_security_key();
 	}
+
+	// Handle 2FA provider custom action saving like resetting TOTP key.
+	Two_Factor_Core::trigger_user_settings_action();
+
+	// Handle 2FA options saving.
+	Two_Factor_Core::user_two_factor_options_update( bp_displayed_user_id() );
 }
 
 // Run validation routine.
