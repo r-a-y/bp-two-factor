@@ -59,7 +59,6 @@ function validate() {
 	// TOTP.
 	if ( class_exists( 'Two_Factor_Totp' ) ) {
 		$totp = \Two_Factor_Totp::get_instance();
-		$totp->user_two_factor_options_update( $user_id );
 
 		// Add a notice and redirect if deleting TOTP secret key.
 		add_action( 'two_factor_user_settings_action', function( $user_id, $action ) use ( $totp, $redirect ) {
@@ -68,6 +67,28 @@ function validate() {
 				bp_core_redirect( $redirect );
 			}
 		}, 20, 2 );
+
+		// Set TOTP as enabled (and primary if blank) during secret key save.
+		add_action( 'added_user_meta', function( $meta_id, $object_id, $meta_key ) use ( $totp ) {
+			if ( $totp::SECRET_META_KEY === $meta_key ) {
+				$enabled_providers_for_user = Two_Factor_Core::get_enabled_providers_for_user( $object_id );
+
+				$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = ! empty( $enabled_providers_for_user ) ? $enabled_providers_for_user : [];
+				$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ][] = 'Two_Factor_Totp';
+
+				// Sanity check.
+				$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = array_unique( $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] );
+
+				// Primary.
+				$_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] = Two_Factor_Core::is_user_using_two_factor( $object_id ) ? Two_Factor_Core::get_primary_provider_for_user( $object_id ) : 'Two_Factor_Totp';
+
+				// Save primary and enabled providers again.
+				Two_Factor_Core::user_two_factor_options_update( $object_id );
+			}
+		}, 10, 3 );
+
+		// Secret key save routine.
+		$totp->user_two_factor_options_update( $user_id );
 
 		$notices = get_user_meta( $user_id, $totp::NOTICES_META_KEY, true );
 
