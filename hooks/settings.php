@@ -61,6 +61,14 @@ function validate() {
 		$totp = \Two_Factor_Totp::get_instance();
 		$totp->user_two_factor_options_update( $user_id );
 
+		// Add a notice and redirect if deleting TOTP secret key.
+		add_action( 'two_factor_user_settings_action', function( $user_id, $action ) use ( $totp, $redirect ) {
+			if ( $totp::ACTION_SECRET_DELETE === $action ) {
+				bp_core_add_message( esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' ) );
+				bp_core_redirect( $redirect );
+			}
+		}, 20, 2 );
+
 		$notices = get_user_meta( $user_id, $totp::NOTICES_META_KEY, true );
 
 		// Error.
