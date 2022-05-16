@@ -43,6 +43,16 @@ function modify_providers( $retval ) {
 	// Remove dummy provider.
 	unset( $retval['Two_Factor_Dummy'] );
 
+	// Ensure 'Recovery Codes' provider is always displayed last.
+	if ( isset( $retval['Two_Factor_Backup_Codes'] ) ) {
+		// Remove 'Recovery Codes' provider.
+		$provider = $retval['Two_Factor_Backup_Codes'];
+		unset( $retval['Two_Factor_Backup_Codes'] );
+
+		// And, add it back to the end of the providers array.
+		$retval['Two_Factor_Backup_Codes'] = $provider;
+	}
+
 	// Remove FIDO U2F if not on SSL, dunno why 2FA core doesn't do this...
 	if ( ! is_ssl() ) {
 		unset( $retval['Two_Factor_FIDO_U2F'] );
@@ -50,7 +60,7 @@ function modify_providers( $retval ) {
 
 	return $retval;
 }
-add_filter( 'two_factor_providers', __NAMESPACE__ . '\\modify_providers' );
+add_filter( 'two_factor_providers', __NAMESPACE__ . '\\modify_providers', 999 );
 
 /**
  * BuddyPress "Settings > General" page loader.
