@@ -147,17 +147,24 @@ function enqueue_assets() {
 		\Two_Factor_FIDO_U2F_Admin::enqueue_assets( 'profile.php' );
 	}
 
+	// WebAuthn.
+	if ( class_exists( '\WildWolf\WordPress\TwoFactorWebAuthn\Admin' ) ) {
+		$webauthn = \WildWolf\WordPress\TwoFactorWebAuthn\Admin::instance();
+		$webauthn->admin_enqueue_scripts( 'profile.php' );
+	}
+
 	// CSS
-	wp_enqueue_style( 'bp-2fa', plugins_url( 'assets/settings.css', Loader\FILE ), [ 'dashicons' ], '20201207' );
+	wp_enqueue_style( 'bp-2fa', plugins_url( 'assets/settings.css', Loader\FILE ), [ 'dashicons' ], '20220511' );
 	wp_add_inline_style( 'bp-2fa', '
 		#security-keys-section .spinner {background-image: url(' . admin_url( '/images/spinner.gif' ) . ')}
 	' );
 
 
 	// JS
-	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery' ], '20201207', true );
+	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery' ], '20220511', true );
 	wp_localize_script( 'bp-2fa', 'bp2fa', [
 		'security_key_desc' => sprintf( '<p>%s</p>', esc_html__( "To register your security key, click on the button below and plug your key into your device's USB port when prompted.", 'bp-two-factor' ) ),
+		'security_key_webauthn_desc' => sprintf( '<p>%s</p>', esc_html__( "To register your WebAuthn security key, enter a key name. Next, click on the \"Register New Key\" button below and plug your key into your device's USB port when prompted.", 'bp-two-factor' ) ),
 		'backup_codes_count' => \Two_Factor_Backup_Codes::codes_remaining_for_user( buddypress()->displayed_user->userdata ),
 		'backup_codes_misplaced' => sprintf( '<p>%s</p>', esc_html__( "If you misplaced your recovery codes, you can generate a new set of recovery codes below. Please note that your old codes will no longer work.", 'bp-two-factor' ) ),
 		'backup_codes_generate' => sprintf( '<p>%s</p>', esc_html__( "Click on the button below to generate your recovery codes.", 'bp-two-factor' ) ),
@@ -181,10 +188,14 @@ function output() {
 		return $url;
 	};
 
+	$userdata = get_userdata( bp_displayed_user_id() );
+
 	// Add some filters.
 	add_filter( 'self_admin_url', $user_settings_page_url, 10, 3 );
 	add_filter( 'gettext_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
 	add_filter( 'gettext_with_context_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
+	add_filter( 'gettext_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
+	add_filter( 'gettext_with_context_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
 	add_filter( 'ngettext_two-factor', __NAMESPACE__ . '\\ngettext_overrides', 10, 4 );
 
 	// Heading and description. Can be removed by wiping out the hook.
@@ -194,18 +205,40 @@ function output() {
 		printf( '<p>%s</p>', esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in. Configure these additional methods below.', 'bp-two-factor' ) );
 	} );
 
+	// WebAuthn.
+	if ( class_exists( '\WildWolf\WordPress\TwoFactorWebAuthn\Admin' ) ) {
+		$webauthn = \WildWolf\WordPress\TwoFactorWebAuthn\Admin::instance();
+
+		// Remove existing WebAuthn table and add modified version.
+		remove_action( 'show_user_security_settings', [ $webauthn, 'show_user_security_settings' ] );
+
+		// Modified version.
+		add_action( 'show_user_security_settings', function() use ( $webauthn, $userdata ) {
+			ob_start();
+			$webauthn->show_user_security_settings( $userdata );
+			$table = ob_get_contents();
+			ob_end_clean();
+
+			// Remove 'required' attribute to allow making other changes on the page.
+			$table = str_replace( 'required="required" id="webauthn-key-name"', 'id="webauthn-key-name"', $table );
+			echo $table;
+		} );
+	}
+
 	/**
 	 * Do something before BP 2FA output.
 	 */
 	do_action( 'bp_2fa_before_settings_output' );
 
 	// Output 2FA options table.
-	Two_Factor_Core::user_two_factor_options( buddypress()->displayed_user->userdata );
+	Two_Factor_Core::user_two_factor_options( $userdata );
 
 	// Remove filters.
 	remove_filter( 'self_admin_url', $user_settings_page_url, 10 );
 	remove_filter( 'gettext_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10 );
 	remove_filter( 'gettext_with_context_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10 );
+	remove_filter( 'gettext_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10 );
+	remove_filter( 'gettext_with_context_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10 );
 	remove_filter( 'ngettext_two-factor', __NAMESPACE__ . '\\ngettext_overrides', 10 );
 
 	/**
@@ -242,6 +275,10 @@ function gettext_overrides( $retval, $untranslated ) {
 
 		case 'Requires an HTTPS connection. Configure your security keys in the "Security Keys" section below.' :
 			return esc_html__( 'Security keys are hardware devices that can be used as your second factor of authentication. To configure your security keys, click on the "Enabled" checkbox and view the "Security Keys" section below.', 'bp-two-factor' );
+			break;
+
+		case 'Requires an HTTPS connection. Please configure your security keys in the <a href="#webauthn-security-keys-section">Security Keys (WebAuthn)</a> section below.' :
+			return esc_html__( 'WebAuthn can be used as your second factor of authentication. To configure your WebAuthn security keys, click on the "Enabled" checkbox and view the "Security Keys (WebAuthn)" section below.', 'bp-two-factor' );
 			break;
 
 		case 'You will have to re-scan the QR code on all devices as the previous codes will stop working.' :

@@ -4,6 +4,8 @@ jQuery(function($){
 	var $checkboxes = $( '.two-factor-methods-table input[type="checkbox"]' );
 	var $backupCodes = $( '#two-factor-backup-codes' );
 	var $totp = $( '#two-factor-totp-options' );
+	var $webAuthnCheckbox = $( '#two-factor-options input[value="TwoFactor_Provider_WebAuthn"]' );
+	var $securityKeysWebAuthn = $('#webauthn-security-keys-section');
 
 	// Only show Security Keys section if checked.
 	if ( $u2fCheckbox.prop( 'checked' ) ) {
@@ -17,6 +19,18 @@ jQuery(function($){
 		}
 	} );
 
+	// Only show WebAuthn Security Keys section if checked.
+	if ( $webAuthnCheckbox.prop( 'checked' ) ) {
+		$securityKeysWebAuthn.show();
+	}
+	$webAuthnCheckbox.on( 'change', function() {
+		if ( $(this).prop( 'checked' ) ) {
+			$securityKeysWebAuthn.show();
+		} else {
+			$securityKeysWebAuthn.hide();
+		}
+	} );
+
 	// Allow 'Enter' key to submit TOTP auth code.
 	$('#two-factor-totp-authcode').keypress(function(e) {
 		if (13 === e.which) {
@@ -27,6 +41,7 @@ jQuery(function($){
 
 	// Eek. Inject strings and other stuff.
 	$securityKeys.find( '.register-security-key' ).prepend( bp2fa.security_key_desc );
+	$securityKeysWebAuthn.find( '.add-webauthn-key' ).prepend( bp2fa.security_key_webauthn_desc );
 	$backupCodes.wrap( '<div id="two-factor-backup-codes-container"></div>' );
 	$backupCodes.attr( 'data-count', bp2fa.backup_codes_count );
 	if ( $backupCodes.data( 'count' ) > 0 ) {

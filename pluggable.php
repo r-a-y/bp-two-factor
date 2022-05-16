@@ -36,6 +36,30 @@ if ( ! function_exists( 'get_column_headers' ) ) {
 	}
 }
 
+// get_hidden_columns() needs to be declared as well.
+if ( ! function_exists( 'get_hidden_columns' ) ) {
+	function get_hidden_columns( $screen ) {
+		if ( is_string( $screen ) ) {
+			$screen = convert_to_screen( $screen );
+		}
+
+		/** This filter is documented in /wp-admin/includes/screen.php */
+		$hidden = get_user_option( 'manage' . $screen->id . 'columnshidden' );
+
+		$use_defaults = ! is_array( $hidden );
+
+		if ( $use_defaults ) {
+			$hidden = array();
+
+			/** This filter is documented in /wp-admin/includes/screen.php */
+			$hidden = apply_filters( 'default_hidden_columns', $hidden, $screen );
+		}
+
+		/** This filter is documented in /wp-admin/includes/screen.php */
+		return apply_filters( 'hidden_columns', $hidden, $screen, $use_defaults );
+	}
+}
+
 /**
  * Dummy class to impersonate wp_screen().
  */

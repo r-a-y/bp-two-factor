@@ -28,11 +28,13 @@
   margin-top: .5em;
 }
 
-#security-keys-section {
+#security-keys-section,
+#webauthn-security-keys-section {
   display: none;
 }
 
-body.no-js #security-keys-section {
+body.no-js #security-keys-section,
+body.no-js #webauthn-security-keys-section {
   display: block;
 }
 
@@ -70,23 +72,28 @@ body.no-js #security-keys-section {
   margin-top: 0;
 }
 
-#security-keys-section tfoot {
+#security-keys-section tfoot,
+#webauthn-security-keys-section tfoot {
   display: none;
 }
 
-#security-keys-section td {
+#security-keys-section td,
+#webauthn-security-keys-section td {
   vertical-align: top;
 }
 
-#security-keys-section .delete {
+#security-keys-section .delete,
+#webauthn-security-keys-section .delete {
   float: none;
 }
 
-#security-keys-section .row-actions {
+#security-keys-section .row-actions,
+#webauthn-security-keys-section .row-actions {
   padding-top: .5em;
 }
 
-#security-keys-section .ptitle {
+#security-keys-section .ptitle,
+#webauthn-security-keys-section .ptitle {
   padding: .1em;
 }
 
