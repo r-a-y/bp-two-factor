@@ -205,26 +205,6 @@ function output() {
 		printf( '<p>%s</p>', esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in. Configure these additional methods below.', 'bp-two-factor' ) );
 	} );
 
-	// WebAuthn.
-	if ( class_exists( '\WildWolf\WordPress\TwoFactorWebAuthn\Admin' ) ) {
-		$webauthn = \WildWolf\WordPress\TwoFactorWebAuthn\Admin::instance();
-
-		// Remove existing WebAuthn table and add modified version.
-		remove_action( 'show_user_security_settings', [ $webauthn, 'show_user_security_settings' ] );
-
-		// Modified version.
-		add_action( 'show_user_security_settings', function() use ( $webauthn, $userdata ) {
-			ob_start();
-			$webauthn->show_user_security_settings( $userdata );
-			$table = ob_get_contents();
-			ob_end_clean();
-
-			// Remove 'required' attribute to allow making other changes on the page.
-			$table = str_replace( 'required="required" id="webauthn-key-name"', 'id="webauthn-key-name"', $table );
-			echo $table;
-		} );
-	}
-
 	/**
 	 * Do something before BP 2FA output.
 	 */
