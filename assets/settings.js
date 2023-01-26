@@ -59,21 +59,6 @@ jQuery(function($){
 		$totp.find( 'code' ).before( bp2fa.totp_key );
 	}
 
-	// Inject ID to checkbox.
-	$('table.two-factor-methods-table input[type="checkbox"]').each( function() {
-		$(this).attr( 'id', 'checkbox-' + $(this).val() );
-	});
-
-	// Inject label for each 2FA type.
-	$('table.two-factor-methods-table td').each( function() {
-		var label = $.trim( $(this).contents().get(0).nodeValue ),
-			inputName = $(this).prev().find('input').val();
-
-		$(this).html(function() {
-			return $(this).html().replace( label, "<label for='checkbox-" + inputName + "'>" + label + "</label>" );
-		});
-	});
-
 	/*
 	 * Select backup codes as a provider, only if a 2FA provider is enabled
 	 * during backup code viewing.
