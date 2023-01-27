@@ -65,7 +65,7 @@ jQuery(function($){
 	 */
 	$( 'button.button-two-factor-backup-codes-generate' ).on( 'click', function() {
 		if ( $checkboxes.filter( ':checked' ).length ) {
-			$( 'table.two-factor-methods-table input[type="checkbox"][value="Two_Factor_Backup_Codes"]' ).prop( 'checked', true );
+			$( 'table.two-factor-methods-table input[type="checkbox"][value="Two_Factor_Backup_Codes"]' ).prop( 'checked', true ).trigger('change');
 		}
 	} );
 
@@ -81,7 +81,9 @@ jQuery(function($){
 	$checkboxes.on( 'change', function() {
 		var radio = $( 'input[name="_two_factor_provider"]' ),
 			radioVal = radio.filter( ':checked' ).val(),
-			checkPrimary = false;
+			checkPrimary = false,
+			checked = $checkboxes.filter( ':checked' ),
+			oneProviderMsg = $('div.one-provider-warning');
 
 		// Enabled a provider.
 		if ( $(this).prop( 'checked' ) ) {
@@ -106,12 +108,16 @@ jQuery(function($){
 				$( 'table.two-factor-methods-table input[type="radio"][value="' + $(this).val() + '"]' ).prop( 'checked', false );
 			}
 
-			checked = $checkboxes.filter( ':checked' );
-
 			// Set a fallback primary provider that isn't Backup Codes.
 			if ( checked.length && 'Two_Factor_Backup_Codes' !== checked.first().val() ) {
 				$( 'table.two-factor-methods-table input[type="radio"][value="' + checked.first().val() + '"]' ).prop( 'checked', true );
 			}
+		}
+
+		if ( checked.length === 1 ) {
+			oneProviderMsg.show();
+		} else {
+			oneProviderMsg.hide();
 		}
 	} );
 

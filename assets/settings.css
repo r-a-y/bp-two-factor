@@ -101,6 +101,22 @@ body.no-js #webauthn-security-keys-section {
   cursor: pointer;
 }
 
+/* for older template packs */
+#buddypress div#message.one-provider-warning p {
+	padding-left: 3em;
+	position: relative;
+}
+
+#buddypress div#message.one-provider-warning p:before {
+	content: "\f534";
+	display: block;
+	font-family: dashicons;
+	font-size: 200%;
+	left: .25em;
+	padding-top: 1%;
+	position: absolute;
+}
+
 #two-factor-backup-codes button.code-loading:before {
   margin: -2px 2px 0 -3px;
   display: inline-block;

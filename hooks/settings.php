@@ -205,6 +205,27 @@ function output() {
 		printf( '<p>%s</p>', esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in. Configure these additional methods below.', 'bp-two-factor' ) );
 	} );
 
+	// Add warning notice if only one provider is enabled.
+	add_action( 'bp_2fa_before_settings_output', function() {
+		$style = '';
+		if ( 1 !== count( Two_Factor_Core::get_enabled_providers_for_user( bp_displayed_user_id() ) ) ) {
+			$style = ' style="display:none;"';
+		}
+
+		// Make things look nice across all template packs.
+		if ( function_exists( 'bp_nouveau' ) ) {
+			$wrapper = '<div class="info bp-feedback one-provider-warning"%1$s><span class="bp-icon" aria-hidden="true"></span><p class="text">%2$s</p></div>';
+		} else {
+			$wrapper = '<div id="message" class="one-provider-warning"%1$s><p>%2$s</p></div>';
+		}
+
+		printf(
+			$wrapper,
+			$style,
+			esc_html__( 'You do not have a secondary two-factor method enabled. Please consider enabling another two-factor method to prevent being locked out of your account should you lose access to your primary method.', 'bp-two-factor' )
+		);
+	}, 11 );
+
 	/**
 	 * Do something before BP 2FA output.
 	 */
