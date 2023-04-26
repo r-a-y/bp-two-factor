@@ -144,7 +144,7 @@ function enqueue_assets() {
 
 
 	// JS
-	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery' ], '20220511', true );
+	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery', 'wp-api' ], '20220511', true );
 	wp_localize_script( 'bp-2fa', 'bp2fa', [
 		'security_key_desc' => sprintf( '<p>%s</p>', esc_html__( "To register your security key, click on the button below and plug your key into your device's USB port when prompted.", 'bp-two-factor' ) ),
 		'security_key_webauthn_desc' => sprintf( '<p>%s</p>', esc_html__( "To register your WebAuthn security key, enter a key name. Next, click on the \"Register New Key\" button below and plug your key into your device's USB port when prompted.", 'bp-two-factor' ) ),
