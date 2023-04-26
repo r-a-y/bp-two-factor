@@ -86,23 +86,6 @@ function validate() {
 				Two_Factor_Core::user_two_factor_options_update( $object_id );
 			}
 		}, 10, 3 );
-
-		// Secret key save routine.
-		$totp->user_two_factor_options_update( $user_id );
-
-		$notices = get_user_meta( $user_id, $totp::NOTICES_META_KEY, true );
-
-		// Error.
-		if ( ! empty( $notices['error'] ) ) {
-			delete_user_meta( $user_id, $totp::NOTICES_META_KEY );
-			bp_core_add_message( implode( "\n", $notices['error'] ), 'error' );
-			bp_core_redirect( $redirect );
-
-		// Success.
-		} elseif ( isset( $_POST['_nonce_user_two_factor_totp_options'] ) && ! empty( $_POST['two-factor-totp-authcode'] ) && ! empty( $_POST['two-factor-totp-key'] ) ) {
-			bp_core_add_message( esc_html__( 'Two-factor authentication option saved', 'bp-two-factor' ) );
-			bp_core_redirect( $redirect );
-		}
 	}
 
 	// U2F.
