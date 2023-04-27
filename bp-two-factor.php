@@ -80,6 +80,36 @@ function settings() {
 add_action( 'bp_actions', __NAMESPACE__ . '\\settings' );
 
 /**
+ * Load our strings overrider.
+ */
+function settings_strings() {
+	require_once __DIR__ . '/hooks/strings.php';
+}
+add_action( 'bp_2fa_before_settings_output', __NAMESPACE__ . '\\settings_strings' );
+
+/**
+ * Overrides strings rendered during the REST API.
+ *
+ * @param  mixed           $result  Response to replace the requested version with. Can be anything
+ *                                  a normal endpoint can return, or null to not hijack the request.
+ * @param  WP_REST_Server  $server  Server instance.
+ * @param  WP_REST_Request $request Request used to generate the response.
+ * @return mixed
+ */
+function settings_strings_rest( $result, $server, $request ) {
+	// Bail if not a two-factor REST API request.
+	if ( 0 !== strpos( $request->get_route(), '/two-factor/' ) ) {
+		return $result;
+	}
+
+	// Load our strings overrider.
+	settings_strings();
+
+	return $result;
+}
+add_filter( 'rest_pre_dispatch', __NAMESPACE__ . '\\settings_strings_rest', 10, 3 );
+
+/**
  * Login loader.
  */
 function login() {

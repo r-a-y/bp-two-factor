@@ -175,11 +175,6 @@ function output() {
 
 	// Add some filters.
 	add_filter( 'self_admin_url', $user_settings_page_url, 10, 3 );
-	add_filter( 'gettext_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
-	add_filter( 'gettext_with_context_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
-	add_filter( 'gettext_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
-	add_filter( 'gettext_with_context_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10, 2 );
-	add_filter( 'ngettext_two-factor', __NAMESPACE__ . '\\ngettext_overrides', 10, 4 );
 
 	// Heading and description. Can be removed by wiping out the hook.
 	add_action( 'bp_2fa_before_settings_output', function() {
@@ -198,11 +193,6 @@ function output() {
 
 	// Remove filters.
 	remove_filter( 'self_admin_url', $user_settings_page_url, 10 );
-	remove_filter( 'gettext_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10 );
-	remove_filter( 'gettext_with_context_two-factor', __NAMESPACE__ . '\\gettext_overrides', 10 );
-	remove_filter( 'gettext_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10 );
-	remove_filter( 'gettext_with_context_two-factor-provider-webauthn', __NAMESPACE__ . '\\gettext_overrides', 10 );
-	remove_filter( 'ngettext_two-factor', __NAMESPACE__ . '\\ngettext_overrides', 10 );
 
 	/**
 	 * Do something after BP 2FA output.
@@ -210,75 +200,3 @@ function output() {
 	do_action( 'bp_2fa_after_settings_output' );
 }
 add_action( 'bp_core_general_settings_before_submit', __NAMESPACE__ . '\\output' );
-
-/**
- * Override strings for the two-factor plugin.
- *
- * @param  string $retval       Translated string.
- * @param  string $untranslated Untranslated string.
- * @return string
- */
-function gettext_overrides( $retval, $untranslated ) {
-	switch ( $untranslated ) {
-		case 'Name' :
-			//return esc_html__( 'Type', 'bp-two-factor' );
-			break;
-
-		case 'Please scan the QR code or manually enter the key, then enter an authentication code from your app in order to complete setup.' :
-			return esc_html__( 'Please scan the QR code or manually enter the key into your authenticator app. Next, enter the authentication code from your app to complete set up.', 'bp-two-factor' );
-			break;
-
-		case 'Submit' :
-			return esc_html__( 'Complete Set Up', 'bp-two-factor' );
-			break;
-
-		case 'FIDO U2F Security Keys' :
-			return esc_html__( 'Security Keys', 'bp-two-factor' );
-			break;
-
-		case 'Requires an HTTPS connection. Configure your security keys in the "Security Keys" section below.' :
-			return esc_html__( 'Security keys are hardware devices that can be used as your second factor of authentication. To configure your security keys, click on the "Enabled" checkbox and view the "Security Keys" section below.', 'bp-two-factor' );
-			break;
-
-		case 'Requires an HTTPS connection. Please configure your security keys in the <a href="#webauthn-security-keys-section">Security Keys (WebAuthn)</a> section below.' :
-			return esc_html__( 'WebAuthn can be used as your second factor of authentication. To configure your WebAuthn security keys, click on the "Enabled" checkbox and view the "Security Keys (WebAuthn)" section below.', 'bp-two-factor' );
-			break;
-
-		case 'You will have to re-scan the QR code on all devices as the previous codes will stop working.' :
-			return esc_html__( 'If you misplaced your TOTP device, you can reset your secret key below. If you used the previous key on other devices, they will also need to be updated with the new key in order to continue working.', 'bp-two-factor' );
-			break;
-
-		case 'Backup Verification Codes (Single Use)' :
-			return esc_html__( 'Recovery Codes', 'bp-two-factor' );
-			break;
-
-		case 'Generate Verification Codes' :
-			return esc_html__( 'Generate New Recovery Codes', 'bp-two-factor' );
-			break;
-
-		// Removing this string since it sounds like we're upselling something.
-		// This text just links to a Google support article anyway...
-		case 'You can find FIDO U2F Security Key devices for sale from here.' :
-			return '';
-			break;
-	}
-
-	return $retval;
-}
-
-/**
- * Override context strings for the two-factor plugin.
- *
- * @param  string $retval Translated string.
- * @param  string $single Untranslated string.
- * @param  string $plural
- * @param  int    $number
- * @return string
- */
-function ngettext_overrides( $retval, $single, $plural, $number ) {
-	if ( '%s unused code remaining.' === $single ) {
-		return _n( 'You previously generated some prior codes and have %s unused code left.', 'You previously generated some prior codes and have %s unused codes left.', $number, 'bp-two-factor' );
-	}
-
-	return $retval;
-}
