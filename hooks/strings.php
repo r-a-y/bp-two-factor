@@ -34,6 +34,10 @@ function gettext_overrides( $retval, $untranslated ) {
 			return esc_html__( 'Please scan the QR code or manually enter the key into your authenticator app. Next, enter the authentication code from your app to complete set up.', 'bp-two-factor' );
 			break;
 
+		case 'Invalid Two Factor Authentication code.' :
+			return esc_html__( 'Invalid code. Please ensure you have correctly entered the code from your authenticator app.', 'bp-two-factor' );
+			break;
+
 		case 'Submit' :
 			return esc_html__( 'Complete Set Up', 'bp-two-factor' );
 			break;

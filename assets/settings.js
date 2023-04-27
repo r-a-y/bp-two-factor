@@ -52,12 +52,21 @@ jQuery(function($){
 		$backupCodes.parent().prepend( bp2fa.backup_codes_generate );
 	}
 	$backupCodes.parent().prepend( bp2fa.recovery_codes_desc );
-	if ( $totp.find( 'a.button' ).length ) {
-		$totp.addClass( 'configured' );
-	} else {
-		$totp.addClass( 'not-configured' );
-		$totp.find( 'code' ).before( bp2fa.totp_key );
+
+	// Customizations for TOTP provider.
+	function totp_toggler() {
+		if ( $totp.find( 'a.button' ).length ) {
+			$totp.addClass( 'configured' ).removeClass( 'not-configured' );
+		} else {
+			$totp.addClass( 'not-configured' ).removeClass( 'configured' );
+
+			if ( ! $totp.find( 'p strong' ).length ) {
+				$totp.find( 'code' ).before( bp2fa.totp_key );
+			}
+		}
 	}
+
+	totp_toggler();
 
 	/*
 	 * Select backup codes as a provider, only if a 2FA provider is enabled
@@ -130,4 +139,36 @@ jQuery(function($){
 	mut.observe(document.querySelector(".two-factor-backup-codes-count"),{
 	  'childList': true
 	});
+
+	// AJAX mods.
+	$( document ).on( "ajaxComplete", function( event, xhr, settings ) {
+		if ( -1 === settings.url.indexOf( '/wp-json/two-factor' ) ) {
+			return;
+		}
+
+		// TOTP.
+		if ( -1 !== settings.url.indexOf( '/totp' ) ) {
+			var checkbox = $('#enabled-Two_Factor_Totp'),
+				checked = true;
+
+			// Invalid TOTP auth code.
+			if ( 400 === xhr.status ) {
+				checked = false;
+				setTimeout( () => {
+					$( '#totp-setup-error' ).prop( 'id', 'message' ).addClass( 'totp-setup-error' ).delay(5000).fadeOut();
+				}, 250 );
+			}
+
+			// Reset TOTP key.
+			if ( xhr.responseJSON.success && settings.headers.hasOwnProperty( 'X-HTTP-Method-Override' ) && 'DELETE' === settings.headers['X-HTTP-Method-Override'] ) {
+				checked = false;
+			}
+
+			checkbox.prop( 'checked', checked ).trigger( 'change' );
+
+			setTimeout( () => {
+				totp_toggler();
+			}, 250 );
+		}
+	} );
 })
