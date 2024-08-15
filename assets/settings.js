@@ -31,14 +31,6 @@ jQuery(function($){
 		}
 	} );
 
-	// Allow 'Enter' key to submit TOTP auth code.
-	$('#two-factor-totp-authcode').keypress(function(e) {
-		if (13 === e.which) {
-			$('input["name=two-factor-totp-submit"]').focus().click();
-			return false;
-		}
-	});
-
 	// Eek. Inject strings and other stuff.
 	$securityKeys.find( '.register-security-key' ).prepend( bp2fa.security_key_desc );
 	$securityKeysWebAuthn.find( '.add-webauthn-key' ).prepend( bp2fa.security_key_webauthn_desc );
