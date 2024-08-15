@@ -1,10 +1,10 @@
-#two-factor-options > tbody > tr > th {
+#two-factor-options[disabled],
+#two-factor-options th:not([scope]) {
   display: none;
 }
 
-#two-factor-options > tbody > tr > td {
-  padding-left: 0;
-  padding-right: 0;
+body #two-factor-options td:has(table.two-factor-methods-table) {
+  padding: 0;
 }
 
 #two-factor-options, #two-factor-options .two-factor-methods-table {
@@ -17,6 +17,15 @@
 
 #two-factor-heading {
   margin-top: 2.5em;
+}
+
+#two-factor-heading + p + .notice-warning a.button {
+  display: inline-block;
+  margin-top: 1em;
+}
+
+#settings-form:has(#two-factor-heading + p + .notice-warning a.button) #two-factor-heading + p + .notice-warning {
+  margin-bottom: 2em;
 }
 
 .two-factor-methods-table td {
@@ -48,7 +57,6 @@ body.no-js #webauthn-security-keys-section {
   width: 20px;
   height: 20px;
   margin: 4px 10px 0;
-  background-image: url(' . admin_url( '/images/spinner.gif' ) . ');
 }
 
 #security-keys-section .spinner.is-active {
@@ -101,7 +109,7 @@ body.no-js #webauthn-security-keys-section {
   cursor: pointer;
 }
 
-#two-factor-backup-codes button.code-loading:before {
+button.button-two-factor-backup-codes-generate.code-loading:before {
   margin: -2px 2px 0 -3px;
   display: inline-block;
   font: normal 20px/1 "dashicons";
