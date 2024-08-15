@@ -54,8 +54,8 @@ function gettext_overrides( $retval, $untranslated ) {
 			return esc_html__( 'WebAuthn can be used as your second factor of authentication. To configure your WebAuthn security keys, click on the "Enabled" checkbox and view the "Security Keys (WebAuthn)" section below.', 'bp-two-factor' );
 			break;
 
-		case 'You will have to re-scan the QR code on all devices as the previous codes will stop working.' :
-			return esc_html__( 'If you misplaced your TOTP device, you can reset your secret key below. If you used the previous key on other devices, they will also need to be updated with the new key in order to continue working.', 'bp-two-factor' );
+		case 'An authenticator app is currently configured. You will need to re-scan the QR code on all devices if reset.' :
+			return esc_html__( 'An authenticator app is currently configured. If you misplaced your authenticator app, you can reset and restart the process below. If you used the previous QR code or key on other devices, they will also need to be updated in order to continue working.', 'bp-two-factor' );
 			break;
 
 		case 'Backup Verification Codes (Single Use)' :

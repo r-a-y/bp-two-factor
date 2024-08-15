@@ -70,15 +70,6 @@ jQuery(function($){
 		}
 	} );
 
-	// Check corresponding enabled checkbox during Primary provider click.
-	$('input[type="radio"][name="_two_factor_provider"]').change(function() {
-		var enabled = $( '#checkbox-' + this.value );
-
-		if ( ! enabled.prop( 'checked' ) ) {
-			enabled.prop( 'checked', true );
-		}
-	} );
-
 	$checkboxes.on( 'change', function() {
 		var radio = $( 'input[name="_two_factor_provider"]' ),
 			radioVal = radio.filter( ':checked' ).val(),
@@ -160,6 +151,9 @@ jQuery(function($){
 
 			setTimeout( () => {
 				totp_toggler();
+				if ( checked && ! $totp.find( '#totp-changed' ).length ) {
+					$totp.append( '<input id="totp-changed" type="hidden" name="totp-changed" value="1" />' );
+				}
 			}, 250 );
 		}
 	} );

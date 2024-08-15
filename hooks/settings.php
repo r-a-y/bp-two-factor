@@ -57,35 +57,26 @@ function validate() {
 	}, 10, 3 );
 
 	// TOTP.
-	if ( class_exists( 'Two_Factor_Totp' ) ) {
+	if ( class_exists( 'Two_Factor_Totp' ) && ! empty( $_POST['totp-changed'] ) ) {
 		$totp = \Two_Factor_Totp::get_instance();
 
-		// Add a notice and redirect if deleting TOTP secret key.
-		add_action( 'two_factor_user_settings_action', function( $user_id, $action ) use ( $totp, $redirect ) {
-			if ( $totp::ACTION_SECRET_DELETE === $action ) {
-				bp_core_add_message( esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' ) );
-				bp_core_redirect( $redirect );
-			}
-		}, 20, 2 );
-
 		// Set TOTP as enabled (and primary if blank) during secret key save.
-		add_action( 'added_user_meta', function( $meta_id, $object_id, $meta_key ) use ( $totp ) {
-			if ( $totp::SECRET_META_KEY === $meta_key ) {
-				$enabled_providers_for_user = Two_Factor_Core::get_enabled_providers_for_user( $object_id );
+		$enabled_providers_for_user = Two_Factor_Core::get_enabled_providers_for_user( $user_id );
 
-				$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = ! empty( $enabled_providers_for_user ) ? $enabled_providers_for_user : [];
-				$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ][] = 'Two_Factor_Totp';
+		$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = ! empty( $enabled_providers_for_user ) ? $enabled_providers_for_user : [];
+		$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ][] = 'Two_Factor_Totp';
 
-				// Sanity check.
-				$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = array_unique( $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] );
+		// Sanity check.
+		$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = array_unique( $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] );
 
-				// Primary.
-				$_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] = Two_Factor_Core::is_user_using_two_factor( $object_id ) ? Two_Factor_Core::get_primary_provider_for_user( $object_id ) : 'Two_Factor_Totp';
+		// Primary.
+		$_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] = Two_Factor_Core::is_user_using_two_factor( $user_id ) ? Two_Factor_Core::get_primary_provider_for_user( $user_id ) : 'Two_Factor_Totp';
 
-				// Save primary and enabled providers again.
-				Two_Factor_Core::user_two_factor_options_update( $object_id );
-			}
-		}, 10, 3 );
+		// Save primary and enabled providers again.
+		Two_Factor_Core::user_two_factor_options_update( $user_id );
+
+		bp_core_add_message( esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' ) );
+		bp_core_redirect( $redirect );
 	}
 
 	// U2F.
