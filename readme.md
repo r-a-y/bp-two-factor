@@ -14,7 +14,6 @@ Integrates the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin in
 
 This plugin also makes the following usability improvements:
 
-- Pressing the "Enter" key can submit the TOTP authentication code now. (See [pull request](https://github.com/WordPress/two-factor/pull/390).)
 - "Security Keys" block only shows up if it is enabled. (See [pull request](https://github.com/WordPress/two-factor/pull/386).)
 - Deselecting a 2FA provider will remove it as the primary 2FA option if it was previously selected. Also, if another 2FA provider was enabled during unchecking, that provider will be selected as the new primary 2FA option. This was done to address [this problem](https://github.com/WordPress/two-factor/issues/342).
 - Changed "FIDO U2F Security Keys" label to "Security Keys" for simplicity.
