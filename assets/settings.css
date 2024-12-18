@@ -37,6 +37,16 @@ body #two-factor-options td:has(table.two-factor-methods-table) {
   margin-top: .5em;
 }
 
+.two-factor-methods-table {
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	border-spacing: 0;
+}
+
+.two-factor-methods-table tbody tr:nth-child(odd) {
+	background-color: #f9f9f9;
+}
+
 #security-keys-section,
 #webauthn-security-keys-section {
   display: none;
