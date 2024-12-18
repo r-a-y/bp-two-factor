@@ -100,7 +100,7 @@ function enqueue_assets() {
 	}
 
 	// CSS
-	wp_enqueue_style( 'bp-2fa', plugins_url( 'assets/settings.css', Loader\FILE ), [ 'dashicons' ], '20240625' );
+	wp_enqueue_style( 'bp-2fa', plugins_url( 'assets/settings.css', Loader\FILE ), [ 'dashicons' ], '20241217' );
 	wp_add_inline_style( 'bp-2fa', '
 		#security-keys-section .spinner {background-image: url(' . admin_url( '/images/spinner.gif' ) . ')}
 	' );
