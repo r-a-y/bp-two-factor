@@ -53,15 +53,6 @@ function modify_providers( $retval ) {
 		$retval['Two_Factor_Backup_Codes'] = $provider;
 	}
 
-	/*
-	 * Remove FIDO U2F if either:
-	 *   1) not on SSL, dunno why 2FA core doesn't do this, or;
-	 *   2) the WebAuthn 2FA plugin is enabled.
-	 */
-	if ( ! is_ssl() || class_exists( 'WildWolf\WordPress\TwoFactorWebAuthn\Plugin' ) ) {
-		unset( $retval['Two_Factor_FIDO_U2F'] );
-	}
-
 	return $retval;
 }
 add_filter( 'two_factor_providers', __NAMESPACE__ . '\\modify_providers', 999 );

@@ -14,11 +14,8 @@ Integrates the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin in
 
 This plugin also makes the following usability improvements:
 
-- "Security Keys" block only shows up if it is enabled. (See [pull request](https://github.com/WordPress/two-factor/pull/386).)
 - Deselecting a 2FA provider will remove it as the primary 2FA option if it was previously selected. Also, if another 2FA provider was enabled during unchecking, that provider will be selected as the new primary 2FA option. This was done to address [this problem](https://github.com/WordPress/two-factor/issues/342).
-- Changed "FIDO U2F Security Keys" label to "Security Keys" for simplicity.
 - Changed "Backup Verification Codes (Single Use)" label to "Recovery Codes". "Recovery Codes" seems to be more in use on other 2FA sites such as Github and Microsoft.
-- Removed "You can find FIDO U2F Security Key devices for sale from here" link under the "Security Keys" section as that sounds like an ad. ([Source](https://github.com/WordPress/two-factor/blob/736473edf5ff6d2fed18ba2406c772f30950343c/providers/class-two-factor-fido-u2f-admin.php#L208).)
 - Added more descriptive text to the "Security Keys" and "Recovery Codes" sections.
 - Changed the BuddyPress "Settings > General" tab to "Settings > Security" to better reflect the content on the page.
 

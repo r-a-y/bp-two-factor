@@ -48,11 +48,11 @@ body #two-factor-options td:has(table.two-factor-methods-table) {
 }
 
 #security-keys-section,
-#webauthn-security-keys-section {
+#webauthn-security-keys-section,
+.two-factor-methods-table tr:has(#enabled-Two_Factor_FIDO_U2F) {
   display: none;
 }
 
-body.no-js #security-keys-section,
 body.no-js #webauthn-security-keys-section {
   display: block;
 }

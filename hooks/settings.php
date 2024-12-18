@@ -79,14 +79,6 @@ function validate() {
 		bp_core_redirect( $redirect );
 	}
 
-	// U2F.
-	// @todo Notice handling?
-	if ( class_exists( 'Two_Factor_FIDO_U2F' ) ) {
-		// Actions.
-		\Two_Factor_FIDO_U2F_Admin::catch_submission( $user_id );
-		\Two_Factor_FIDO_U2F_Admin::catch_delete_security_key();
-	}
-
 	// Handle 2FA provider custom action saving like resetting TOTP key.
 	Two_Factor_Core::trigger_user_settings_action();
 
@@ -101,26 +93,6 @@ validate();
  * Enqueue assets.
  */
 function enqueue_assets() {
-	// U2F.
-	if ( class_exists( 'Two_Factor_FIDO_U2F' ) ) {
-		/*
-		 * Override 2FA fido-u2f-admin as it relies on the WP admin form.
-		 *
-		 * This will be removed once fixed upstream.
-		 */
-		wp_register_script(
-			'fido-u2f-admin',
-			plugins_url( 'assets/fido-u2f-admin.js', Loader\FILE ),
-			array( 'jquery', 'fido-u2f-api' ),
-			'20201026',
-			true
-		);
-
-		wp_enqueue_style( 'list-tables' );
-
-		\Two_Factor_FIDO_U2F_Admin::enqueue_assets( 'profile.php' );
-	}
-
 	// WebAuthn.
 	if ( class_exists( '\WildWolf\WordPress\TwoFactorWebAuthn\Admin' ) ) {
 		$webauthn = \WildWolf\WordPress\TwoFactorWebAuthn\Admin::instance();
