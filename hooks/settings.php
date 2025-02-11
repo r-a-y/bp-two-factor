@@ -95,8 +95,17 @@ validate();
 function enqueue_assets() {
 	// WebAuthn.
 	if ( class_exists( '\WildWolf\WordPress\TwoFactorWebAuthn\Admin' ) ) {
+		// WebAuthn's admin_enqueue_scripts() requires this global set.
+		$GLOBALS['user_id'] = bp_displayed_user_id();
+
+		// Load up WebAuthn's scripts.
 		$webauthn = \WildWolf\WordPress\TwoFactorWebAuthn\Admin::instance();
 		$webauthn->admin_enqueue_scripts( 'profile.php' );
+
+		// WebAuthn's profile.min.js requires the #user_id value set.
+		add_action( 'bp_2fa_after_settings_output', function() {
+			printf( '<input type="hidden" name="user_id" id="user_id" value="%s" />', bp_displayed_user_id() );
+		} );
 	}
 
 	// CSS
