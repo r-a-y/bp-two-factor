@@ -104,7 +104,7 @@ function enqueue_assets() {
 
 		// WebAuthn's profile.min.js requires the #user_id value set.
 		add_action( 'bp_2fa_after_settings_output', function() {
-			printf( '<input type="hidden" name="user_id" id="user_id" value="%s" />', bp_displayed_user_id() );
+			printf( '<input type="hidden" name="user_id" id="user_id" value="%d" />', bp_displayed_user_id() );
 		} );
 	}
 
