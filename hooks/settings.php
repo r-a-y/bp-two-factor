@@ -22,40 +22,6 @@ function validate() {
 	$user_id  = bp_displayed_user_id();
 	$redirect = trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() );
 
-	// Eek. Ensure we add a notice if a save attempt was made.
-	add_action( 'updated_user_meta', function( $meta_id, $object_id, $meta_key ) use ( $redirect ) {
-		if ( ! isset( $_POST['_nonce_user_two_factor_options'] ) ) {
-			return;
-		}
-
-		$should_redirect = false;
-
-		// Enabled providers.
-		if ( Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY === $meta_key ) {
-			$should_redirect = true;
-
-			/*
-			 * Check to see if the primary provider changed.
-			 *
-			 * If primary provider did change, we redirect then.
-			 */
-			$new_provider = isset( $_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] ) ? $_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] : '';
-			$primary      = get_user_meta( $object_id, Two_Factor_Core::PROVIDER_USER_META_KEY, true );
-			if ( '' !== $new_provider && $primary !== $new_provider ) {
-				$should_redirect = false;
-			}
-
-		// Primary provider.
-		} elseif ( Two_Factor_Core::PROVIDER_USER_META_KEY === $meta_key ) {
-			$should_redirect = true;
-		}
-
-		if ( $should_redirect ) {
-			bp_core_add_message( esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' ) );
-			bp_core_redirect( $redirect );
-		}
-	}, 10, 3 );
-
 	// TOTP.
 	if ( class_exists( 'Two_Factor_Totp' ) && ! empty( $_POST['totp-changed'] ) ) {
 		$totp = \Two_Factor_Totp::get_instance();
@@ -83,7 +49,40 @@ function validate() {
 	Two_Factor_Core::trigger_user_settings_action();
 
 	// Handle 2FA options saving.
-	Two_Factor_Core::user_two_factor_options_update( bp_displayed_user_id() );
+	if ( isset( $_POST['_nonce_user_two_factor_options'] ) ) {
+		$should_redirect = false;
+
+		// If enabled providers changed, redirect.
+		$new_providers = isset( $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] ) ? $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] : [];
+		$providers     = get_user_meta( $user_id, Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY, true );
+
+		$new_providers = array_filter( $new_providers );
+
+		if ( empty( $providers ) ) {
+			$providers = [];
+		}
+
+		if ( $new_providers !== $providers ) {
+			$should_redirect = true;
+		}
+
+		// If primary provider changed, redirect.
+		$new_provider      = isset( $_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] ) ? $_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] : '';
+		$existing_provider = get_user_meta( $user_id, Two_Factor_Core::PROVIDER_USER_META_KEY, true );
+
+		if ( ! $should_redirect && '' !== $new_provider && $existing_provider !== $new_provider ) {
+			$should_redirect = true;
+		}
+
+		// Do the 2FA save routine.
+		Two_Factor_Core::user_two_factor_options_update( $user_id );
+
+		// Redirect if necessary to display our custom message.
+		if ( $should_redirect ) {
+			bp_core_add_message( esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' ) );
+			bp_core_redirect( $redirect );
+		}
+	}
 }
 
 // Run validation routine.
