@@ -3,6 +3,7 @@ jQuery(function($){
 	var $u2fCheckbox = $( '#two-factor-options input[value="Two_Factor_FIDO_U2F"]' );
 	var $checkboxes = $( '.two-factor-methods-table input[type="checkbox"]' );
 	var $backupCodes = $( '#two-factor-backup-codes' );
+	var $backupCodesPrimary = $( '#two-factor-options input[type="radio"][value="Two_Factor_Backup_Codes"]' );
 	var $totp = $( '#two-factor-totp-options' );
 	var $webAuthnCheckbox = $( '#two-factor-options input[value="TwoFactor_Provider_WebAuthn"]' );
 	var $securityKeysWebAuthn = $('#webauthn-security-keys-section');
@@ -30,6 +31,9 @@ jQuery(function($){
 			$securityKeysWebAuthn.hide();
 		}
 	} );
+
+	// Disable Recovery Codes primary radio button.
+	$backupCodesPrimary.prop( 'disabled', true );
 
 	// Eek. Inject strings and other stuff.
 	$securityKeys.find( '.register-security-key' ).prepend( bp2fa.security_key_desc );

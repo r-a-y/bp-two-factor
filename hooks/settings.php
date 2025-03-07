@@ -29,6 +29,8 @@ function validate() {
 	if ( isset( $_POST['_nonce_user_two_factor_options'] ) ) {
 		$should_redirect = false;
 
+		$message = esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' );
+
 		// If enabled providers changed, redirect.
 		$new_providers = isset( $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] ) ? $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] : [];
 		$providers     = get_user_meta( $user_id, Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY, true );
@@ -51,12 +53,23 @@ function validate() {
 			$should_redirect = true;
 		}
 
+		// Recovery Codes.
+		if ( in_array( 'Two_Factor_Backup_Codes', $new_providers ) ) {
+			$codes = get_user_meta( $user_id, '_two_factor_backup_codes', true );
+
+			// User did not generate recovery codes, but tried to enable it.
+			if ( empty( $codes ) ) {
+				$message = esc_html__( 'Please generate your recovery codes before enabling it as a two-factor method', 'bp-two-factor' );
+				$should_redirect = true;
+			}
+		}
+
 		// Do the 2FA save routine.
 		Two_Factor_Core::user_two_factor_options_update( $user_id );
 
 		// Redirect if necessary to display our custom message.
 		if ( $should_redirect ) {
-			bp_core_add_message( esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' ) );
+			bp_core_add_message( $message );
 			bp_core_redirect( $redirect );
 		}
 	}
@@ -92,7 +105,7 @@ function enqueue_assets() {
 
 
 	// JS
-	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery', 'wp-api' ], '20240625', true );
+	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery', 'wp-api' ], '20250307', true );
 	wp_localize_script( 'bp-2fa', 'bp2fa', [
 		'security_key_desc' => sprintf( '<p>%s</p>', esc_html__( "To register your security key, click on the button below and plug your key into your device's USB port when prompted.", 'bp-two-factor' ) ),
 		'security_key_webauthn_desc' => sprintf( '<p>%s</p>', esc_html__( "To register your WebAuthn security key, enter a key name. Next, click on the \"Register New Key\" button below and plug your key into your device's USB port when prompted.", 'bp-two-factor' ) ),

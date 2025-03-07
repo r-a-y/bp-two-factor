@@ -58,14 +58,6 @@ function gettext_overrides( $retval, $untranslated ) {
 			return esc_html__( 'An authenticator app is currently configured. If you misplaced your authenticator app, you can reset and restart the process below. If you used the previous QR code or key on other devices, they will also need to be updated in order to continue working.', 'bp-two-factor' );
 			break;
 
-		case 'Backup Verification Codes (Single Use)' :
-			return esc_html__( 'Recovery Codes', 'bp-two-factor' );
-			break;
-
-		case 'Generate Verification Codes' :
-			return esc_html__( 'Generate New Recovery Codes', 'bp-two-factor' );
-			break;
-
 		// A similar msg is displayed when a backup method is missing, so removing.
 		case 'Configure a primary two-factor method along with a backup method, such as Recovery Codes, to avoid being locked out if you lose access to your primary method.' :
 			return '';
