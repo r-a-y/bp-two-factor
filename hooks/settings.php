@@ -20,7 +20,7 @@ use Two_Factor_Core;
  */
 function validate() {
 	$user_id  = bp_displayed_user_id();
-	$redirect = trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() );
+	$redirect = bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_settings_slug() ) ) );
 
 	// Handle 2FA provider custom action saving like resetting TOTP key.
 	Two_Factor_Core::trigger_user_settings_action();
