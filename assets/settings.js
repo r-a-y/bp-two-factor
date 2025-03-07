@@ -151,9 +151,6 @@ jQuery(function($){
 
 			setTimeout( () => {
 				totp_toggler();
-				if ( checked && ! $totp.find( '#totp-changed' ).length ) {
-					$totp.append( '<input id="totp-changed" type="hidden" name="totp-changed" value="1" />' );
-				}
 			}, 250 );
 		}
 	} );

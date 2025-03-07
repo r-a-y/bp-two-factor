@@ -22,29 +22,6 @@ function validate() {
 	$user_id  = bp_displayed_user_id();
 	$redirect = trailingslashit( bp_displayed_user_domain() . bp_get_settings_slug() );
 
-	// TOTP.
-	if ( class_exists( 'Two_Factor_Totp' ) && ! empty( $_POST['totp-changed'] ) ) {
-		$totp = \Two_Factor_Totp::get_instance();
-
-		// Set TOTP as enabled (and primary if blank) during secret key save.
-		$enabled_providers_for_user = Two_Factor_Core::get_enabled_providers_for_user( $user_id );
-
-		$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = ! empty( $enabled_providers_for_user ) ? $enabled_providers_for_user : [];
-		$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ][] = 'Two_Factor_Totp';
-
-		// Sanity check.
-		$_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] = array_unique( $_POST[ Two_Factor_Core::ENABLED_PROVIDERS_USER_META_KEY ] );
-
-		// Primary.
-		$_POST[ Two_Factor_Core::PROVIDER_USER_META_KEY ] = Two_Factor_Core::is_user_using_two_factor( $user_id ) ? Two_Factor_Core::get_primary_provider_for_user( $user_id ) : 'Two_Factor_Totp';
-
-		// Save primary and enabled providers again.
-		Two_Factor_Core::user_two_factor_options_update( $user_id );
-
-		bp_core_add_message( esc_html__( 'Two-factor authentication options updated', 'bp-two-factor' ) );
-		bp_core_redirect( $redirect );
-	}
-
 	// Handle 2FA provider custom action saving like resetting TOTP key.
 	Two_Factor_Core::trigger_user_settings_action();
 
