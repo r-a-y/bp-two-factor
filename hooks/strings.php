@@ -66,9 +66,8 @@ function gettext_overrides( $retval, $untranslated ) {
 			return esc_html__( 'Generate New Recovery Codes', 'bp-two-factor' );
 			break;
 
-		// Removing this string since it sounds like we're upselling something.
-		// This text just links to a Google support article anyway...
-		case 'You can find FIDO U2F Security Key devices for sale from here.' :
+		// A similar msg is displayed when a backup method is missing, so removing.
+		case 'Configure a primary two-factor method along with a backup method, such as Recovery Codes, to avoid being locked out if you lose access to your primary method.' :
 			return '';
 			break;
 	}
