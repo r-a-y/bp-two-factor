@@ -137,47 +137,14 @@ function output() {
 	// Add some filters.
 	add_filter( 'self_admin_url', $user_settings_page_url, 10, 3 );
 
-	// Heading and description. Can be removed by wiping out the hook.
-	add_action( 'bp_2fa_before_settings_output', function() {
-		printf( '<h3 id="two-factor-heading">%s</h3>', esc_html__( 'Two-factor Authentication', 'bp-two-factor' ) );
-
-		/*
-		 * Output revalidation block if necessary.
-		 *
-		 * We need to duplicate some 2FA core logic here to display the revalidation
-		 * block outside the 2FA options table.
-		 */
-		$show_2fa_options = Two_Factor_Core::current_user_can_update_two_factor_options();
-
-		if ( ! $show_2fa_options ) {
-			$url = add_query_arg(
-				'redirect_to',
-				urlencode( bp_displayed_user_url( bp_members_get_path_chunks( array( bp_get_settings_slug() ) ) ) . '#two-factor-options' ),
-				Two_Factor_Core::get_user_two_factor_revalidate_url()
-			);
-
-			$notice = esc_html__( 'To update your Two-Factor options, you must first revalidate your session.', 'two-factor' );
-
-			$button = sprintf(
-					'<div class="generic-button"><a class="two-factor-revalidate" href="%s">' . esc_html__( 'Revalidate now', 'two-factor' ) . '</a></div>',
-					esc_url( $url )
-			);
-
-			printf(
-				'<div class="notice inline notice-warning two-factor-warning-revalidate-session"><p>%1$s</p>%2$s</div>',
-				wp_kses_post( $notice ),
-				$button
-			);
-
-		} else {
-			printf( '<p>%s</p>', esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in. Configure these additional methods below.', 'bp-two-factor' ) );
-		}
-	} );
+	echo '<div class="bp-2fa">';
 
 	/**
 	 * Do something before BP 2FA output.
+	 *
+	 * @param WP_User $userdata WP user data.
 	 */
-	do_action( 'bp_2fa_before_settings_output' );
+	do_action( 'bp_2fa_before_settings_output', $userdata );
 
 	// Output 2FA options table.
 	Two_Factor_Core::user_two_factor_options( $userdata );
@@ -187,7 +154,11 @@ function output() {
 
 	/**
 	 * Do something after BP 2FA output.
+	 *
+	 * @param WP_User $userdata WP user data.
 	 */
-	do_action( 'bp_2fa_after_settings_output' );
+	do_action( 'bp_2fa_after_settings_output', $userdata );
+
+	echo '</div>';
 }
 add_action( 'bp_core_general_settings_before_submit', __NAMESPACE__ . '\\output' );
