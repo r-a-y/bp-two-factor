@@ -55,10 +55,6 @@ jQuery(function($){
 			$totp.addClass( 'configured' ).removeClass( 'not-configured' );
 		} else {
 			$totp.addClass( 'not-configured' ).removeClass( 'configured' );
-
-			if ( ! $totp.find( 'p strong' ).length ) {
-				$totp.find( 'code' ).before( bp2fa.totp_key );
-			}
 		}
 	}
 

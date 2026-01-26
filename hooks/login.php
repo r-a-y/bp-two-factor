@@ -20,10 +20,6 @@ namespace CAC\BP2FA\Login;
  */
 function gettext_overrides( $retval, $untranslated ) {
 	switch ( $untranslated ) {
-		case 'Backup Verification Codes (Single Use)' :
-			return esc_html__( 'Recovery Codes', 'bp-two-factor' );
-			break;
-
 		case 'FIDO U2F Security Keys' :
 			return esc_html__( 'Security Keys', 'bp-two-factor' );
 			break;

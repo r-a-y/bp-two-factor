@@ -26,19 +26,15 @@ add_filter( 'ngettext_two-factor', __NAMESPACE__ . '\\ngettext_overrides', 10, 4
  */
 function gettext_overrides( $retval, $untranslated ) {
 	switch ( $untranslated ) {
-		case 'Name' :
-			//return esc_html__( 'Type', 'bp-two-factor' );
-			break;
-
-		case 'Please scan the QR code or manually enter the key, then enter an authentication code from your app in order to complete setup.' :
-			return esc_html__( 'Please scan the QR code or manually enter the key into your authenticator app. Next, enter the authentication code from your app to complete set up.', 'bp-two-factor' );
+		case 'Two-Factor Options' :
+			return esc_html( 'Two-factor Authentication', 'bp-two-factor' );
 			break;
 
 		case 'Invalid Two Factor Authentication code.' :
 			return esc_html__( 'Invalid code. Please ensure you have correctly entered the code from your authenticator app.', 'bp-two-factor' );
 			break;
 
-		case 'Submit' :
+		case 'Verify' :
 			return esc_html__( 'Complete Set Up', 'bp-two-factor' );
 			break;
 
@@ -47,21 +43,25 @@ function gettext_overrides( $retval, $untranslated ) {
 			break;
 
 		case 'Requires an HTTPS connection. Configure your security keys in the "Security Keys" section below.' :
-			return esc_html__( 'Security keys are hardware devices that can be used as your second factor of authentication. To configure your security keys, click on the "Enabled" checkbox and view the "Security Keys" section below.', 'bp-two-factor' );
+			return esc_html__( 'Security keys are hardware devices that can be used as your second factor of authentication. To configure your security keys, click on this checkbox and view the "Security Keys" section below.', 'bp-two-factor' );
 			break;
 
 		case 'Requires an HTTPS connection. Please configure your security keys in the <a href="#webauthn-security-keys-section">Security Keys (WebAuthn)</a> section below.' :
-			return esc_html__( 'WebAuthn can be used as your second factor of authentication. To configure your WebAuthn security keys, click on the "Enabled" checkbox and view the "Security Keys (WebAuthn)" section below.', 'bp-two-factor' );
+			return esc_html__( 'WebAuthn can be used as your second factor of authentication. To configure your WebAuthn security keys, click on this checkbox and view the "Security Keys (WebAuthn)" section below.', 'bp-two-factor' );
 			break;
 
 		case 'An authenticator app is currently configured. You will need to re-scan the QR code on all devices if reset.' :
 			return esc_html__( 'An authenticator app is currently configured. If you misplaced your authenticator app, you can reset and restart the process below. If you used the previous QR code or key on other devices, they will also need to be updated in order to continue working.', 'bp-two-factor' );
 			break;
 
-		// A similar msg is displayed when a backup method is missing, so removing.
-		case 'Configure a primary two-factor method along with a backup method, such as Recovery Codes, to avoid being locked out if you lose access to your primary method.' :
-			return '';
+		/// Replace application passwords message with our custom description.
+		case 'Authentication for REST API and XML-RPC must use application passwords (defined above) instead of your regular password.' :
+			return esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in. Configure these additional methods below.', 'bp-two-factor' );
 			break;
+
+		// Remove some strings.
+		case 'Configure a primary two-factor method along with a backup method, such as Recovery Codes, to avoid being locked out if you lose access to your primary method. Methods marked as recommended are more secure and easier to use.' :
+			return '';
 	}
 
 	return $retval;
