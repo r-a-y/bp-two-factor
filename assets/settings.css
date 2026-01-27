@@ -1,23 +1,36 @@
 #two-factor-options[disabled],
 #two-factor-options th:not([scope]),
-#two-factor-options h2 {
+#two-factor-options h2,
+.two-factor-warning-revalidate-session + .two-factor-warning-suggest-backup,
+.two-factor-warning-suggest-backup em,
+.button-two-factor-backup-codes-generate + em {
 	display: none;
 }
 
 #two-factor-options {
 	margin-top: 0;
+	padding: 0;
 }
 
-#two-factor-options, #two-factor-options .two-factor-methods-table {
+#two-factor-options,
+.two-factor-methods-table,
+#two-factor-options .two-factor-methods-table tr,
+#two-factor-options .two-factor-methods-table td {
+	border: 0;
+}
+
+#two-factor-options .two-factor-methods-table {
 	table-layout: auto;
 }
 
-#two-factor-heading {
+.bp-2fa {
 	margin-top: 2.5em;
 }
 
 .two-factor-revalidate {
 	margin-bottom: 2em;
+	margin-top: 1em;
+	text-transform: capitalize;
 }
 
 .two-factor-methods-table td {
@@ -30,13 +43,33 @@
 }
 
 .two-factor-methods-table {
-	background-color: #fff;
-	border: 1px solid #e5e5e5;
 	border-spacing: 0;
 }
 
-.two-factor-methods-table tbody tr:nth-child(odd) {
-	background-color: #f9f9f9;
+#two-factor-options .two-factor-primary-method-table th,
+#two-factor-options .two-factor-primary-method-table td {
+	display: block;
+}
+
+#two-factor-options .two-factor-primary-method-table th {
+	display: block;
+	font-weight: bold;
+	font-size: 17px;
+	padding-top: 0;
+	padding-left: 0;
+}
+
+#two-factor-options .two-factor-primary-method-table td {
+	display: grid;
+}
+
+#two-factor-options .two-factor-primary-method-table select {
+	order: 2;
+}
+
+#two-factor-options .two-factor-primary-method-table option[disabled],
+#two-factor-options .two-factor-primary-method-table option[value="Two_Factor_Backup_Codes"] {
+	display: none;
 }
 
 #security-keys-section,
