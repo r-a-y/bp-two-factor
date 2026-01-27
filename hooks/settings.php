@@ -161,3 +161,29 @@ function output() {
 	echo '</div>';
 }
 add_action( 'bp_core_general_settings_before_submit', __NAMESPACE__ . '\\output' );
+
+/**
+ * Remove Recovery Codes as a recommended provider in certain situations.
+ *
+ * Recovery Codes is removed as a recommended provider if:
+ *  - The user has no 2FA provider enabled
+ *  - Recovery Codes is already enabled by the user
+ *  - Two or more 2FA providers are enabled by the user
+ *
+ * @param array   $retval Current recommended 2FA providers.
+ * @param WP_User $user   Current user.
+ * @return array
+ */
+function remove_recovery_codes_as_recommended_provider( $retval, $user ) {
+	$available = Two_Factor_Core::get_available_providers_for_user( $user );
+
+	if ( empty( $available ) || isset( $available['Two_Factor_Backup_Codes'] ) || count( $available ) > 1 ) {
+		$find_backup_codes = array_search( 'Two_Factor_Backup_Codes', $retval );
+		if ( false !== $find_backup_codes ) {
+			unset( $retval[ $find_backup_codes ] );
+		}
+	}
+
+	return $retval;
+}
+add_filter( 'two_factor_recommended_providers', __NAMESPACE__ . '\\remove_recovery_codes_as_recommended_provider', 10, 2 );
