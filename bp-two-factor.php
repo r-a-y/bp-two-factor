@@ -130,3 +130,14 @@ function rename_general_toolbar( $retval ) {
 	return $retval;
 }
 add_filter( 'bp_settings_admin_nav', __NAMESPACE__ . '\\rename_general_toolbar' );
+
+/**
+ * Use BuddyPress HTML email for 2FA email token send.
+ */
+function bp_email( $retval ) {
+	if ( is_2fa_activated() ) {
+		require __DIR__ . '/hooks/email.php';
+	}
+	return $retval;
+}
+add_filter( 'two_factor_token_email_subject', __NAMESPACE__ . '\\bp_email' );
