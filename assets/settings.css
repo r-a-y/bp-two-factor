@@ -28,6 +28,7 @@
 }
 
 .two-factor-revalidate {
+	display: table;
 	margin-bottom: 2em;
 	margin-top: 1em;
 	text-transform: capitalize;
