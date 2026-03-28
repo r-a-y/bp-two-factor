@@ -74,8 +74,7 @@
 }
 
 #security-keys-section,
-#webauthn-security-keys-section,
-.two-factor-methods-table tr:has(#enabled-Two_Factor_FIDO_U2F) {
+#webauthn-security-keys-section {
 	display: none;
 }
 

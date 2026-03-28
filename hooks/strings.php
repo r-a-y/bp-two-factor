@@ -38,14 +38,6 @@ function gettext_overrides( $retval, $untranslated ) {
 			return esc_html__( 'Complete Set Up', 'bp-two-factor' );
 			break;
 
-		case 'FIDO U2F Security Keys' :
-			return esc_html__( 'Security Keys', 'bp-two-factor' );
-			break;
-
-		case 'Requires an HTTPS connection. Configure your security keys in the "Security Keys" section below.' :
-			return esc_html__( 'Security keys are hardware devices that can be used as your second factor of authentication. To configure your security keys, click on this checkbox and view the "Security Keys" section below.', 'bp-two-factor' );
-			break;
-
 		case 'Requires an HTTPS connection. Please configure your security keys in the <a href="#webauthn-security-keys-section">Security Keys (WebAuthn)</a> section below.' :
 			return esc_html__( 'WebAuthn can be used as your second factor of authentication. To configure your WebAuthn security keys, click on this checkbox and view the "Security Keys (WebAuthn)" section below.', 'bp-two-factor' );
 			break;
