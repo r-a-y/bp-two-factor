@@ -2,7 +2,7 @@
 
 Integrates the [Two Factor](https://wordpress.org/plugins/two-factor/) plugin into BuddyPress.
 
-Compatible with Two Factor v0.14.2.
+Compatible with Two Factor v0.16.0.
 
 ## How to use?
 
@@ -13,6 +13,8 @@ Compatible with Two Factor v0.14.2.
 5. Logout and login again to test two-factor authentication.
 
 ## Notes
+
+If a user has configured Email has their 2FA method, this plugin also supports BuddyPress HTML email templates to send the email 2FA token. Read the following to find out how to set this up: https://github.com/r-a-y/bp-two-factor/issues/2
 
 This plugin also makes the following usability improvements:
 
