@@ -38,8 +38,9 @@ function gettext_overrides( $retval, $untranslated ) {
 			return esc_html__( 'Complete Set Up', 'bp-two-factor' );
 			break;
 
-		case 'Requires an HTTPS connection. Please configure your security keys in the <a href="#webauthn-security-keys-section">Security Keys (WebAuthn)</a> section below.' :
-			return esc_html__( 'WebAuthn can be used as your second factor of authentication. To configure your WebAuthn security keys, click on this checkbox and view the "Security Keys (WebAuthn)" section below.', 'bp-two-factor' );
+		// For the two-factor-provider-webauthn plugin.
+		case 'Requires an HTTPS connection. Please configure your security keys below.' :
+			return esc_html__( 'WebAuthn can be used as your second factor of authentication. Enable this method to continue configuration.', 'bp-two-factor' );
 			break;
 
 		case 'An authenticator app is currently configured. You will need to re-scan the QR code on all devices if reset.' :

@@ -121,7 +121,10 @@ add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_assets' );
  * Output 2FA options.
  */
 function output() {
-	require Loader\DIR . '/pluggable.php';
+	// WebAuthn requires some admin functions on the frontend.
+	if ( class_exists( '\WildWolf\WordPress\TwoFactorWebAuthn\Plugin' ) ) {
+		require Loader\DIR . '/pluggable.php';
+	}
 
 	// Modify user admin settings URL to use BP user settings page.
 	$user_settings_page_url = function( $url, $path ) {

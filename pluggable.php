@@ -2,9 +2,9 @@
 /**
  * Admin pluggable functions
  *
- * These functions are required for the two-factor plugin to work
- * properly on the frontend. This is primarily for the U2F
- * Security Keys table to display without fatal errors.
+ * These functions are required for the two-factor-provider-webauthn
+ * plugin to work properly on the frontend. This is primarily to
+ * display the WebAuthn Security Keys table without fatal errors.
  *
  * @package    bp-two-factor
  * @subpackage pluggable
