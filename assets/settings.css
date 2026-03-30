@@ -34,7 +34,7 @@
 	text-transform: capitalize;
 }
 
-.two-factor-methods-table td {
+.two-factor-methods-table > tbody > tr > td {
 	font-weight: bold;
 }
 
@@ -73,8 +73,13 @@
 	display: none;
 }
 
+#two-factor-options label:hover {
+	cursor: pointer;
+}
+
 #security-keys-section,
-#webauthn-security-keys-section {
+#webauthn-security-keys-section,
+.two-factor-methods-table tr:has(#enabled-Two_Factor_FIDO_U2F) {
 	display: none;
 }
 
@@ -103,7 +108,8 @@ body.no-js #webauthn-security-keys-section {
 	flex-direction: column-reverse;
 }
 
-#two-factor-totp-options.configured p + p a.button {
+#two-factor-totp-options.configured p + p a.button,
+#webauthn-security-keys-section #counter {
 	width: max-content;
 }
 
@@ -141,8 +147,29 @@ body.no-js #webauthn-security-keys-section {
 	padding: .1em;
 }
 
-#two-factor-options label:hover {
-	cursor: pointer;
+#webauthn-security-keys-section .rename-key,
+#webauthn-security-keys-section .confirm-revoke {
+	margin-bottom: .9em;
+}
+
+#webauthn-security-keys-section .rename-key p {
+	margin-bottom: 0;
+}
+
+#webauthn-security-keys-section .rename a {
+	color: #2271b1;
+}
+
+#webauthn-security-keys-section .delete a {
+	color: #b32d2e;
+}
+
+#webauthn-security-keys-section p.description {
+	font-size: .9em;
+}
+
+#webauthn-security-keys-section .wp-list-table:has(.no-items) + .description {
+	display: none;
 }
 
 button.button-two-factor-backup-codes-generate.code-loading:before {

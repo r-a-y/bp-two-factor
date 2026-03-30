@@ -95,6 +95,9 @@ function enqueue_assets() {
 		add_action( 'bp_2fa_after_settings_output', function() {
 			printf( '<input type="hidden" name="user_id" id="user_id" value="%d" />', bp_displayed_user_id() );
 		} );
+
+		// Need to enqueue list-tables styles as well.
+		wp_enqueue_style( 'list-tables' );
 	}
 
 	// CSS
