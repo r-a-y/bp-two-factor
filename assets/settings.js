@@ -4,7 +4,7 @@ jQuery(function($){
 	var $totp = $( '#two-factor-totp-options' );
 	var $webAuthnCheckbox = $( '#two-factor-options input[value="TwoFactor_Provider_WebAuthn"]' );
 	var $securityKeysWebAuthn = $('#webauthn-security-keys-section');
-	var $revalidateButton = $( '.two-factor-warning-revalidate-session .button' );
+	var $revalidateButton = $( '.bp-2fa .notice-warning a.button' );
 	var $primaryMethods = $( '#two-factor-options .two-factor-primary-method-table select option:not(:disabled,[value=""],[value="Two_Factor_Backup_Codes"])' );
 
 	// Only show WebAuthn Security Keys section if checked.
@@ -21,7 +21,7 @@ jQuery(function($){
 
 	// Eek. Inject strings and other stuff.
 	$securityKeysWebAuthn.find( '.add-webauthn-key' ).prepend( bp2fa.security_key_webauthn_desc );
-	$backupCodes.wrap( '<div id="two-factor-backup-codes-container"></div>' );
+	$backupCodes.wrap( '<div id="two-factor-backup-codes"></div>' );
 	$backupCodes.attr( 'data-count', bp2fa.backup_codes_count );
 	if ( $backupCodes.data( 'count' ) > 0 ) {
 		$backupCodes.parent().prepend( bp2fa.backup_codes_misplaced );

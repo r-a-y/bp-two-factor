@@ -1,7 +1,8 @@
 #two-factor-options[disabled],
 #two-factor-options th:not([scope]),
 #two-factor-options h2,
-.two-factor-warning-revalidate-session + .two-factor-warning-suggest-backup,
+.bp-2fa .notice-warning + .notice-warning,
+.totp-steps p.description,
 .two-factor-warning-suggest-backup em,
 .button-two-factor-backup-codes-generate + em {
 	display: none;
@@ -114,7 +115,7 @@ body.no-js #webauthn-security-keys-section {
 	width: max-content;
 }
 
-#two-factor-backup-codes[data-count="0"] span {
+#two-factor-backup-codes[data-count="0"] p.two-factor-backup-codes-count {
 	display: none;
 }
 
