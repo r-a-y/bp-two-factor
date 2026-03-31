@@ -28,33 +28,30 @@ function gettext_overrides( $retval, $untranslated ) {
 	switch ( $untranslated ) {
 		case 'Two-Factor Options' :
 			return esc_html( 'Two-factor Authentication', 'bp-two-factor' );
-			break;
 
 		case 'Invalid Two Factor Authentication code.' :
 			return esc_html__( 'Invalid code. Please ensure you have correctly entered the code from your authenticator app.', 'bp-two-factor' );
-			break;
 
 		case 'Verify' :
 			return esc_html__( 'Complete Set Up', 'bp-two-factor' );
-			break;
-
-		// For the two-factor-provider-webauthn plugin.
-		case 'Requires an HTTPS connection. Please configure your security keys below.' :
-			return esc_html__( 'WebAuthn can be used as your second factor of authentication. Enable this method to continue configuration.', 'bp-two-factor' );
-			break;
 
 		case 'An authenticator app is currently configured. You will need to re-scan the QR code on all devices if reset.' :
 			return esc_html__( 'An authenticator app is currently configured. If you misplaced your authenticator app, you can reset and restart the process below. If you used the previous QR code or key on other devices, they will also need to be updated in order to continue working.', 'bp-two-factor' );
-			break;
 
-		/// Replace application passwords message with our custom description.
+		// Replace application passwords message with our custom description.
 		case 'Authentication for REST API and XML-RPC must use application passwords (defined above) instead of your regular password.' :
 			return esc_html__( 'Two-factor authentication adds an optional, additional layer of security to your account by requiring more than your password to log in. Configure these additional methods below.', 'bp-two-factor' );
-			break;
 
 		// Remove some strings.
 		case 'Configure a primary two-factor method along with a backup method, such as Recovery Codes, to avoid being locked out if you lose access to your primary method. Methods marked as recommended are more secure and easier to use.' :
 			return '';
+
+		// For the two-factor-provider-webauthn plugin.
+		case 'Requires an HTTPS connection. Please configure your security keys below.' :
+			return esc_html__( 'WebAuthn can be used as your second factor of authentication. Enable this method to continue configuration.', 'bp-two-factor' );
+
+		case 'Are you sure to revoke this key?' :
+			return esc_html__( 'Do you want to revoke this key?', 'bp-two-factor' );
 	}
 
 	return $retval;

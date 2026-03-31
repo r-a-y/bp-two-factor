@@ -73,7 +73,8 @@
 	display: none;
 }
 
-#two-factor-options label:hover {
+#two-factor-options label:hover,
+#two-factor-options .has-row-actions button:hover {
 	cursor: pointer;
 }
 
@@ -162,6 +163,27 @@ body.no-js #webauthn-security-keys-section {
 
 #webauthn-security-keys-section .delete a {
 	color: #b32d2e;
+}
+
+#webauthn-security-keys-section .notice {
+	background: #fff;
+	border: 1px solid #999;
+	border-left-width: 8px;
+	box-shadow: 0 1px 1px rgba(0,0,0,.04);
+	margin-bottom: 1em;
+	padding: 1px 12px;
+}
+
+#webauthn-security-keys-section .notice p {
+	margin: .7em 0;
+}
+
+#webauthn-security-keys-section .notice-success {
+	border-left-color: #39a855;
+}
+
+#webauthn-security-keys-section .notice-error {
+	border-left-color: #d63638;
 }
 
 #webauthn-security-keys-section p.description {
