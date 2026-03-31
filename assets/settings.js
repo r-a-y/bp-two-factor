@@ -1,6 +1,4 @@
 jQuery(function($){
-	var $securityKeys = $( '#security-keys-section' );
-	var $u2fCheckbox = $( '#two-factor-options input[value="Two_Factor_FIDO_U2F"]' );
 	var $checkboxes = $( '.two-factor-methods-table input[type="checkbox"]' );
 	var $backupCodes = $( '#two-factor-backup-codes' );
 	var $totp = $( '#two-factor-totp-options' );
@@ -8,18 +6,6 @@ jQuery(function($){
 	var $securityKeysWebAuthn = $('#webauthn-security-keys-section');
 	var $revalidateButton = $( '.two-factor-warning-revalidate-session .button' );
 	var $primaryMethods = $( '#two-factor-options .two-factor-primary-method-table select option:not(:disabled,[value=""],[value="Two_Factor_Backup_Codes"])' );
-
-	// Only show Security Keys section if checked.
-	if ( $u2fCheckbox.prop( 'checked' ) ) {
-		$securityKeys.show();
-	}
-	$u2fCheckbox.on( 'change', function() {
-		if ( $(this).prop( 'checked' ) ) {
-			$securityKeys.show();
-		} else {
-			$securityKeys.hide();
-		}
-	} );
 
 	// Only show WebAuthn Security Keys section if checked.
 	if ( $webAuthnCheckbox.prop( 'checked' ) ) {
@@ -34,7 +20,6 @@ jQuery(function($){
 	} );
 
 	// Eek. Inject strings and other stuff.
-	$securityKeys.find( '.register-security-key' ).prepend( bp2fa.security_key_desc );
 	$securityKeysWebAuthn.find( '.add-webauthn-key' ).prepend( bp2fa.security_key_webauthn_desc );
 	$backupCodes.wrap( '<div id="two-factor-backup-codes-container"></div>' );
 	$backupCodes.attr( 'data-count', bp2fa.backup_codes_count );
