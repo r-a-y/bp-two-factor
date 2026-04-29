@@ -39,7 +39,7 @@ add_filter( 'two_factor_token_email_message', __NAMESPACE__ . '\\save_token', 10
  *
  * @param  null  $retval Null by default.
  * @param  array $r      Email arguments.
- * @return bool Returns false to override wp_mail().
+ * @return null|bool     Returns false to override wp_mail(), null if no BP email template.
  */
 function use_bp_email( $retval, $r ) {
 	// Sanity check: Make sure we have our email token before continuing.
@@ -51,7 +51,7 @@ function use_bp_email( $retval, $r ) {
 	$user_id = Store::get( 'user_id' );
 
 	// Remove our filter.
-	remove_filter( 'pre_wp_mail', __NAMESPACE__ . '\\use_bp_email', 0, 2 );
+	remove_filter( 'pre_wp_mail', __NAMESPACE__ . '\\use_bp_email', 0 );
 
 	// Use BP's email.
 	bp_send_email(
@@ -77,7 +77,7 @@ add_filter( 'pre_wp_mail', __NAMESPACE__ . '\\use_bp_email', 0, 2 );
  * Returns the token expiry in minutes.
  *
  * @param  int $user_id User ID
- * @return int|float 
+ * @return float
  */
 function get_token_expiry( $user_id ) {
 	$retval = \Two_Factor_Email::get_instance()->user_token_ttl( $user_id );
@@ -101,7 +101,7 @@ class Store {
 	/**
 	 * Getter.
 	 *
-	 * @param  string $item Variable name.
+	 * @param  string $var Variable name.
 	 * @return mixed
 	 */
 	public static function get( $var ) {
@@ -115,7 +115,7 @@ class Store {
 	/**
 	 * Setter.
 	 *
-	 * @param string $item Variable name.
+	 * @param string $var Variable name.
 	 * @param mixed  $val  Variable value.
 	 */
 	public static function set( $var, $val ) {

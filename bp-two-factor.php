@@ -81,10 +81,10 @@ add_action( 'bp_2fa_before_settings_output', __NAMESPACE__ . '\\settings_strings
 /**
  * Overrides strings rendered during the REST API.
  *
- * @param  mixed           $result  Response to replace the requested version with. Can be anything
- *                                  a normal endpoint can return, or null to not hijack the request.
- * @param  WP_REST_Server  $server  Server instance.
- * @param  WP_REST_Request $request Request used to generate the response.
+ * @param  mixed            $result  Response to replace the requested version with. Can be anything
+ *                                   a normal endpoint can return, or null to not hijack the request.
+ * @param  \WP_REST_Server  $server  Server instance.
+ * @param  \WP_REST_Request $request Request used to generate the response.
  * @return mixed
  */
 function settings_strings_rest( $result, $server, $request ) {

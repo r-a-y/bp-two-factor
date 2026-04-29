@@ -27,7 +27,7 @@ add_filter( 'ngettext_two-factor', __NAMESPACE__ . '\\ngettext_overrides', 10, 4
 function gettext_overrides( $retval, $untranslated ) {
 	switch ( $untranslated ) {
 		case 'Two-Factor Options' :
-			return esc_html( 'Two-factor Authentication', 'bp-two-factor' );
+			return esc_html__( 'Two-factor Authentication', 'bp-two-factor' );
 
 		case 'Invalid Two Factor Authentication code.' :
 			return esc_html__( 'Invalid code. Please ensure you have correctly entered the code from your authenticator app.', 'bp-two-factor' );

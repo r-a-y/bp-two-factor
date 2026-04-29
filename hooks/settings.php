@@ -108,10 +108,11 @@ function enqueue_assets() {
 
 
 	// JS
-	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery', 'wp-api' ], '20260330', true );
+	$displayed_user = bp_get_displayed_user();
+	wp_enqueue_script( 'bp-2fa', plugins_url( 'assets/settings.js', Loader\FILE ), [ 'jquery', 'wp-api' ], '20260129', true );
 	wp_localize_script( 'bp-2fa', 'bp2fa', [
 		'security_key_webauthn_desc' => sprintf( '<p>%s</p>', esc_html__( "To register your WebAuthn credentials, enter a key name. Next, click on the \"Register New Key\" button below and follow the prompts from your device.", 'bp-two-factor' ) ),
-		'backup_codes_count' => \Two_Factor_Backup_Codes::codes_remaining_for_user( buddypress()->displayed_user->userdata ),
+		'backup_codes_count' => \Two_Factor_Backup_Codes::codes_remaining_for_user( $displayed_user->userdata ),
 		'backup_codes_misplaced' => sprintf( '<p>%s</p>', esc_html__( "If you misplaced your recovery codes, you can generate a new set of recovery codes below. Please note that your old codes will no longer work.", 'bp-two-factor' ) ),
 		'backup_codes_generate' => sprintf( '<p>%s</p>', esc_html__( "Click on the button below to generate your recovery codes.", 'bp-two-factor' ) ),
 		'recovery_codes_desc' => sprintf( '<p>%s</p>', esc_html__( "Recovery codes can be used to access your account if you lose access to your device and cannot receive two-factor authentication codes.", 'bp-two-factor' ) )
@@ -139,14 +140,14 @@ function output() {
 	$userdata = get_userdata( bp_displayed_user_id() );
 
 	// Add some filters.
-	add_filter( 'self_admin_url', $user_settings_page_url, 10, 3 );
+	add_filter( 'self_admin_url', $user_settings_page_url, 10, 2 );
 
 	echo '<div class="bp-2fa">';
 
 	/**
 	 * Do something before BP 2FA output.
 	 *
-	 * @param WP_User $userdata WP user data.
+	 * @param WP_User|false $userdata WP_User object on success, false on failure.
 	 */
 	do_action( 'bp_2fa_before_settings_output', $userdata );
 
@@ -154,12 +155,12 @@ function output() {
 	Two_Factor_Core::user_two_factor_options( $userdata );
 
 	// Remove filters.
-	remove_filter( 'self_admin_url', $user_settings_page_url, 10 );
+	remove_filter( 'self_admin_url', $user_settings_page_url );
 
 	/**
 	 * Do something after BP 2FA output.
 	 *
-	 * @param WP_User $userdata WP user data.
+	 * @param WP_User|false $userdata WP_User object on success, false on failure.
 	 */
 	do_action( 'bp_2fa_after_settings_output', $userdata );
 
@@ -175,8 +176,8 @@ add_action( 'bp_core_general_settings_before_submit', __NAMESPACE__ . '\\output'
  *  - Recovery Codes is already enabled by the user
  *  - Two or more 2FA providers are enabled by the user
  *
- * @param array   $retval Current recommended 2FA providers.
- * @param WP_User $user   Current user.
+ * @param array    $retval Current recommended 2FA providers.
+ * @param \WP_User $user   Current user.
  * @return array
  */
 function remove_recovery_codes_as_recommended_provider( $retval, $user ) {
