@@ -20,9 +20,6 @@ namespace CAC\BP2FA\Login;
  */
 function gettext_overrides( $retval, $untranslated ) {
 	switch ( $untranslated ) {
-		case 'FIDO U2F Security Keys' :
-			return esc_html__( 'Security Keys', 'bp-two-factor' );
-			break;
 	}
 
 	return $retval;
