@@ -80,14 +80,7 @@ add_filter( 'pre_wp_mail', __NAMESPACE__ . '\\use_bp_email', 0, 2 );
  * @return int|float 
  */
 function get_token_expiry( $user_id ) {
-	if ( method_exists( 'Two_Factor_Email', 'user_token_ttl' ) ) {
-		$retval = \Two_Factor_Email::get_instance()->user_token_ttl( $user_id );
-
-	// Fallback for older 2FA plugin versions.
-	} else {
-		/** This filter is documented in /two-factor/providers/class-two-factor-email.php */
-		$retval = (int) apply_filters( 'two_factor_email_token_ttl', 15 * MINUTE_IN_SECONDS, $user_id );
-	}
+	$retval = \Two_Factor_Email::get_instance()->user_token_ttl( $user_id );
 
 	return round( $retval / MINUTE_IN_SECONDS, 2 );
 }
